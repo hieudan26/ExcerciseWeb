@@ -1,0 +1,17 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="utf-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Murach's Java Servlets and JSP</title>
+    <link rel="stylesheet" href="<c:url value="/styles/main.css"/>"/>
+</head>
+<body>
+
+<h1>404 Error</h1>
+<p>The server was not able to find the file you requested.</p>
+<p>To continue, click the Back button.</p>
+
+</body>
+</html>
