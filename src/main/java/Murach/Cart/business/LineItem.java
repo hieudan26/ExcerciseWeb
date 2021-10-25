@@ -5,17 +5,17 @@ import java.text.NumberFormat;
 
 public class LineItem implements Serializable {
 
-    private Product product;
+    private ProductEntity product;
     private int quantity;
 
     public LineItem() {
     }
 
-    public void setProduct(Product p) {
+    public void setProduct(ProductEntity p) {
         product = p;
     }
 
-    public Product getProduct() {
+    public ProductEntity getProduct() {
         return product;
     }
 

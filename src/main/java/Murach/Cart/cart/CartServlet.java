@@ -1,11 +1,12 @@
 package Murach.Cart.cart;
 
-import Murach.Cart.data.ProductIO;
+import Murach.Cart.business.ProductEntity;
+import Murach.Cart.data.ProductDAO;
 import Murach.Cart.business.LineItem;
 import Murach.Cart.business.Cart;
-import Murach.Cart.business.Product;
 
 import java.io.*;
+import java.util.List;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -52,12 +53,10 @@ public class CartServlet extends HttpServlet {
             } catch (NumberFormatException nfe) {
                 quantity = 1;
             }
-
-            String path = sc.getRealPath("/WEB-INF/products.txt");
-            Product product = ProductIO.getProduct(productCode, path);
+            List<ProductEntity> products = ProductDAO.getOne(productCode);
 
             LineItem lineItem = new LineItem();
-            lineItem.setProduct(product);
+            lineItem.setProduct(products.get(0));
             lineItem.setQuantity(quantity);
             if (quantity > 0) {
                 cart.addItem(lineItem);

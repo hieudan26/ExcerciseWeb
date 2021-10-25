@@ -1,15 +1,16 @@
 package Murach.Chapter7.download;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import Murach.Chapter7.business.User;
-import Murach.Chapter7.data.UserIO;
+import Murach.Chapter7.business.UserEntity;
+import Murach.Chapter7.data.UserDAO;
 import Murach.Chapter7.util.CookieUtil;
-import Murach.Chapter7.business.Product;
-import Murach.Chapter7.data.ProductIO;
+
 @WebServlet(name ="DownloadServlet",value ="/download")
 public class DownloadServlet extends HttpServlet {
 
@@ -67,7 +68,7 @@ public class DownloadServlet extends HttpServlet {
         String productCode = request.getParameter("productCode");
         HttpSession session = request.getSession();
         session.setAttribute("productCode", productCode);
-        User user = (User) session.getAttribute("user");
+        UserEntity user = (UserEntity) session.getAttribute("user");
 
         String url;
         // if User object doesn't exist, check email cookie
@@ -83,8 +84,15 @@ public class DownloadServlet extends HttpServlet {
             // if cookie exists, create User object and go to Downloads page
             else {
                 ServletContext sc = getServletContext();
-                String path = sc.getRealPath("/WEB-INF/EmailList.txt");
-                user = UserIO.getUser(emailAddress, path);
+
+                List<UserEntity> userEntityList = UserDAO.getOne(emailAddress);
+                if (userEntityList.size() != 0) {
+                    user = (UserEntity) UserDAO.getOne(emailAddress).get(0);
+                }
+                else {
+                    user = null;
+                }
+
                 session.setAttribute("user", user);
                 url = "/Chapter7/" + productCode + "_download.jsp";
             }
@@ -105,15 +113,13 @@ public class DownloadServlet extends HttpServlet {
         String lastName = request.getParameter("lastName");
 
         // store the data in a User object
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setEmail(email);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
+        user.setFirstname(firstName);
+        user.setLastname(lastName);
 
         // write the User object to a file
-        ServletContext sc = getServletContext();
-        String path = sc.getRealPath("/WEB-INF/EmailList.txt");
-        UserIO.add(user, path);
+        UserDAO.insertUser(user);
 
         // store the User object as a session attribute
         HttpSession session = request.getSession();

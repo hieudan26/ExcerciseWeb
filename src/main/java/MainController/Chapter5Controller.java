@@ -1,9 +1,6 @@
 package MainController;
 
-import sun.rmi.server.Dispatcher;
-
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,10 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "Chapter5", value="/Chapter5")
+@WebServlet(name = "chapter5", value="/Chapter5")
 public class Chapter5Controller extends HttpServlet {
     @Override
-    public void  doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public void  doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         RequestDispatcher dispatcher=request.getRequestDispatcher("Chapter5/indexChapter5.jsp");
         try {
             dispatcher.forward(request, response);
@@ -23,7 +20,6 @@ public class Chapter5Controller extends HttpServlet {
         }
     }
     public void  doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        RequestDispatcher dispatcher=request.getRequestDispatcher("Chapter5/indexChapter5.jsp");
         this.doGet(request, response);
     }
 }

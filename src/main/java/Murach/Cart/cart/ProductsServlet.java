@@ -2,12 +2,14 @@ package Murach.Cart.cart;
 
 import java.io.*;
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.util.ArrayList;
+import java.util.List;
 
-import Murach.Cart.data.ProductIO;
-import Murach.Cart.business.Product;
+import Murach.Cart.business.ProductEntity;
+import Murach.Cart.data.ProductDAO;
 
+@WebServlet(name = "indexCart", value="/cartc7")
 public class ProductsServlet extends HttpServlet {
 
     @Override
@@ -15,13 +17,19 @@ public class ProductsServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        String path = getServletContext().getRealPath("/WEB-INF/products.txt");
-        ArrayList<Product> products = ProductIO.getProducts(path);
+
+        List<ProductEntity> products = ProductDAO.getAll();
         session.setAttribute("products", products);
 
         String url = "/Cart/indexCart.jsp";
         getServletContext()
                 .getRequestDispatcher(url)
                 .forward(request, response);
+    }
+
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        this.doGet(request,response);
     }
 }

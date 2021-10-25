@@ -1,14 +1,14 @@
 package Murach.Chapter5.email;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import Murach.Chapter7.business.User;
-import Murach.Chapter5.data.UserDB;
-import Murach.Chapter7.data.UserIO;
+
+import Murach.Chapter7.business.UserEntity;
+import Murach.Chapter7.data.UserDAO;
 
 @WebServlet(name ="EmailList",value = "/emailList")
 public class EmailListServlet extends HttpServlet {
@@ -32,13 +32,16 @@ public class EmailListServlet extends HttpServlet {
         }
         else if (action.equals("add")) {
             // get parameters from the request
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
+            String firstName = request.getParameter("firstname");
+            String lastName = request.getParameter("lastname");
             String email = request.getParameter("email");
 
             // store data in User object and save User object in database
-            User user = new User(firstName, lastName, email);
-            UserDB.insert(user);
+            UserEntity user = new UserEntity();
+            user.setLastname(lastName);
+            user.setFirstname(firstName);
+            user.setEmail(email);
+            UserDAO.insertUser(user);
 
             // set User object in request object and set URL
             session.setAttribute("user", user);
@@ -50,8 +53,7 @@ public class EmailListServlet extends HttpServlet {
         request.setAttribute("currentDate", currentDate);
 
         // create users list and store it in the session
-        String path = getServletContext().getRealPath("/WEB-INF/EmailList.txt");
-        ArrayList<User> users = UserIO.getUsers(path);
+        List<UserEntity> users =  UserDAO.getAll();
         session.setAttribute("users", users);
 
         // forward request and response objects to specified URL
